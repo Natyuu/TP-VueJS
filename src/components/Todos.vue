@@ -16,9 +16,20 @@
 
         <button type="submit">Ajouter</button>
     </form>
-    <h2>Liste des tâches</h2>
+    <div class="todos-container">
+        <h2>Liste des tâches</h2>
+        <div>
+            <button @click="deleteAllTodos" class="delete-all-btn">Supprimer toutes les tâches</button>
+        </div>
+    </div>
+    <footer>
+        <span>{{ remainingTasks }} tâches restantes</span>
+    </footer>
+    <button @click="currentFilter = 'all'">Toutes</button>
+    <button @click="currentFilter = 'todo'">A faire</button>
+    <button @click="currentFilter = 'done'">Faites</button>
     <ul>
-        <li v-for="(todo, index) in todos" :key="index">
+        <li v-for="(todo, index) in filteredTodos" :key="index">
             {{ todo.title }} - {{ todo.description }} - {{ todo.deadline }}
             <button @click="validateTask(index)" :style="{ backgroundColor: todo.done ? '#7FFF7F' : '#FF6961' }">{{ todo.done ? 'FAIT' : 'valider' }}</button>
         </li>
@@ -43,6 +54,10 @@ export default class Todos extends Vue {
 
     public newTodo: Todo = new Todo('', '', '');
 
+    // filtre de base
+    public currentFilter: string = "all";
+
+    // ajoute dans la liste une nouvelle tache et met la description à 'à faire' s'il n'y a pas de description entrée.
     public addTodo() {
         if (this.newTodo.title && this.newTodo.deadline) {
             if (!this.newTodo.description) { // Si la description est vide, on la remplace par une chaîne vide
@@ -54,6 +69,7 @@ export default class Todos extends Vue {
 
     }
 
+    // Valide la tache cliqué et renome en Fait la description si c'est celle de base 'à faire'.
     public validateTask(index: number) {
         this.todos[index].done = !this.todos[index].done;
         if(this.todos[index].description == "à faire" ) {
@@ -62,9 +78,43 @@ export default class Todos extends Vue {
             this.todos[index].description = this.todos[index].done ? 'Fait' : 'à faire';
         }
     }
+
+    // Propriété calculée pour afficher le nombre de tâches restantes
+    get remainingTasks(): number {
+        return this.todos.filter(todo => !todo.done).length;
+    }
+
+    // Propriété pour filtrer les tâches
+    get filteredTodos(): Todo[] {
+        if (this.currentFilter === 'all') {
+            return this.todos;
+        } else if (this.currentFilter === 'todo') {
+            return this.todos.filter(todo => !todo.done);
+        } else if (this.currentFilter === 'done') {
+            return this.todos.filter(todo => todo.done);
+        }
+        return this.todos;
+    }
+
+    public deleteAllTodos() {
+        this.todos = [];
+    }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    ul {
+        list-style-type: none;
+    }
+
+    .todos-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .delete-all-btn {
+        margin-left: 10px;
+    }
 </style>
