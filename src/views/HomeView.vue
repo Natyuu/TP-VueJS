@@ -4,15 +4,18 @@
         <button v-on:click="foo()">
             ok
         </button>
-        <div v-background>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</div>
-        <div v-background:yellow>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</div>
+        <Todos/>
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import Todos from '@/components/Todos.vue';
 
 @Options({
+    components: {
+        Todos,
+    },
     props: {
         msg: String
     }
