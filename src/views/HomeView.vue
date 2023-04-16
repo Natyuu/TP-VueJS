@@ -1,9 +1,5 @@
 <template>
     <div class="home">
-        <p v-if="visible">Maintenant vous me voyez {{message}}</p>
-        <button v-on:click="foo()">
-            ok
-        </button>
         <Todos/>
     </div>
 </template>
