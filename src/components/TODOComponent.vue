@@ -47,14 +47,14 @@
                 </div>
                 <ul>
                     <li v-for="(todo, index) in filteredTask" :key="index">
-                <span @dblclick="editTitle(index)"
-                      contentEditable="true"
-                      class="space-edit"
-                      @keyup.enter="saveTitle(index, $event)">{{ todo.title }}</span>
+                        <span @dblclick="editTitle(index)"
+                        contentEditable="true"
+                        class="space-edit"
+                        @keyup.enter="saveTitle(index, $event)">{{ todo.title }}</span>
                         <span>- {{ todo.description }} - {{ todo.deadline }} </span>
                         <button @click="validateTask(index)"
                                 :style="{ backgroundColor: todo.done ? '#4CAF50' : '#ccc' }" class="button-valid">{{ todo.done ? 'FAIT' : 'valider la tâche' }}</button>
-                        <button @click="deleteTask(index)" class="delete-btn">Supprimer</button>
+                        <button @click="deleteTask(index)" class="delete-btn2">Supprimer</button>
                     </li>
                 </ul>
             </div>
@@ -306,6 +306,9 @@ button:hover {
     background-color: #d32f2f;
 }
 
+.delete-container {
+    justify-content: space-between;
+}
 /* Style pour la barre de sélection de filtres */
 .filter-button {
     background-color: #ccc;
