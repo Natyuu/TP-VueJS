@@ -16,7 +16,7 @@ Ceci est une application de liste de todos développée sur la base du framework
 
 ## Utilisation
 
-Pour utiliser l'application, il suffit de cloner le dépôt et de lancer la commande via votre terminal.
+Pour utiliser l'application, il suffit de cloner le dépôt et de lancer la commande via votre terminal une fois rendu dans la base du projet.
 ```
 npm run serve
 ```
