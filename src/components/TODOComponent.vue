@@ -1,52 +1,64 @@
 <template>
     <div class="todo">
         <!-- Ajout du formulaire -->
-        <h2>Ajouter une tâche</h2>
-        <form @submit.prevent="addTodo">
-            <label for="title">Titre :</label>
-            <input type="text" id="title" v-model="newTodo.title" required>
+        <div class="container">
+            <div class="column todo-form">
+                <!-- Ajouter une tâche -->
+                <h2>Ajouter une tâche</h2>
+                <form @submit.prevent="addTodo">
+                    <div class="new-task">
+                        <label for="title">Titre : </label>
+                        <input type="text" id="title" v-model="newTodo.title" required>
+                    </div>
+                    <div class="new-task">
+                        <label for="description">Description : </label>
+                        <input type="text" id="description" v-model="newTodo.description">
+                    </div>
+                    <div class="new-task">
+                        <label for="deadline">Date limite : </label>
+                        <input type="date" id="deadline" v-model="newTodo.deadline" required>
+                    </div>
 
-            <label for="description">Description : </label>
-            <input type="text" id="description" v-model="newTodo.description">
-
-            <label for="deadline">Date limite : </label>
-            <input type="date" id="deadline" v-model="newTodo.deadline" required>
-
-            <button type="submit">Ajouter</button>
-        </form>
-        <div>
-            <h2>Liste des tâches</h2>
-            <div class="todos-container">
-                <button @click="deleteAllTasks" class="delete-btn">Supprimer toutes les tâches</button>
-                <button @click="deleteFinishedTasks" class="delete-btn">Supprimer les tâches terminées</button>
+                    <button type="submit">Ajouter</button>
+                </form>
             </div>
-        </div>
-        <div class="todos-container2">
-            <footer v-if="todos.length > 0" class="space-between-btn">
-                <span class="text-tasks-remaining">{{ remainingTasks }} tâches restantes à faire</span>
-            </footer>
-            <button :class="['filter-button', {'active': currentFilter === 'all'}]"
-                    @click="currentFilter = 'all'"
-                    class="space-selection-btn">Toutes</button>
-            <button :class="['filter-button', {'active': currentFilter === 'todo'}]"
-                    @click="currentFilter = 'todo'"
-                    class="space-selection-btn">A faire</button>
-            <button :class="['filter-button', {'active': currentFilter === 'done'}]"
-                    @click="currentFilter = 'done'"
-                    class="space-selection-btn">Faites</button>
-        </div>
-        <ul>
-            <li v-for="(todo, index) in filteredTask" :key="index">
+            <div class="column todo-list">
+                <!-- Liste des tâches -->
+                <div>
+                    <div class="todos-container">
+                        <button @click="deleteAllTasks" class="delete-btn1">Supprimer toutes les tâches</button>
+                        <h2>Liste des tâches</h2>
+                        <button @click="deleteFinishedTasks" class="delete-btn2">Supprimer les tâches terminées</button>
+                    </div>
+                </div>
+                <div class="todos-container2">
+                    <footer v-if="todos.length > 0" class="space-between-btn">
+                        <span class="text-tasks-remaining">{{ remainingTasks }} tâches restantes à faire</span>
+                    </footer>
+                    <button :class="['filter-button', {'active': currentFilter === 'all'}]"
+                            @click="currentFilter = 'all'"
+                            class="space-selection-btn">Toutes</button>
+                    <button :class="['filter-button', {'active': currentFilter === 'todo'}]"
+                            @click="currentFilter = 'todo'"
+                            class="space-selection-btn">A faire</button>
+                    <button :class="['filter-button', {'active': currentFilter === 'done'}]"
+                            @click="currentFilter = 'done'"
+                            class="space-selection-btn">Faites</button>
+                </div>
+                <ul>
+                    <li v-for="(todo, index) in filteredTask" :key="index">
                 <span @dblclick="editTitle(index)"
                       contentEditable="true"
                       class="space-edit"
                       @keyup.enter="saveTitle(index, $event)">{{ todo.title }}</span>
-                <span>- {{ todo.description }} - {{ todo.deadline }}</span>
-                <button @click="validateTask(index)"
-                        :style="{ backgroundColor: todo.done ? '#7FFF7F' : '#FF6961' }">{{ todo.done ? 'FAIT' : 'valider' }}</button>
-                <button @click="deleteTask(index)" class="delete-btn">Supprimer</button>
-            </li>
-        </ul>
+                        <span>- {{ todo.description }} - {{ todo.deadline }} </span>
+                        <button @click="validateTask(index)"
+                                :style="{ backgroundColor: todo.done ? '#4CAF50' : '#ccc' }" class="button-valid">{{ todo.done ? 'FAIT' : 'valider la tâche' }}</button>
+                        <button @click="deleteTask(index)" class="delete-btn">Supprimer</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -155,17 +167,44 @@ export default class TODOComponent extends Vue {
         // Retirer le focus de l'élément modifié
         (event.target as HTMLElement).blur();
     }
-
-
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-ul {
-    list-style-type: none;
+/* Mise en place des colonnes */
+.container {
+    display: flex;
 }
 
+.column {
+    flex: 1;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Affichage du texte a la ligne */
+.new-task {
+    display: flex;
+}
+
+.new-task label {
+    flex-basis: 30%;
+    text-align: left;
+}
+
+.new-task input {
+    flex-basis: 70%;
+    text-align: center;
+}
+
+.new-task * {
+    margin: 10px;
+}
+
+/* Style de l'affichage des boutons de suppression */
 .todos-container {
     display: flex;
     justify-content: center;
@@ -179,27 +218,21 @@ ul {
     margin-top: 10px;
 }
 
-.delete-btn {
-    margin-left: 10px;
-}
-
+/* Style pour ajouter un espace */
 .space-between-btn {
     margin-right: 20px;
 }
 
+.space-edit {
+    margin-right: 5px;
+}
+
+/* Style pour changer la couleur du texte du nombre de taches restantes */
 .text-tasks-remaining {
     color: #6AB8E6;
 }
 
-.filter-button {
-    background-color: #ccc ;
-}
-
-.filter-button.active {
-    background-color: #333333 ;
-    color : white;
-}
-
+/* Style pour ajouter un espace entre deux boutons */
 .space-selection-btn {
     margin-right: 10px;
 }
@@ -208,13 +241,91 @@ ul {
     margin-right: 0;
 }
 
-.space-edit {
-    margin-right: 5px;
+/* Style de l'ensemble */
+.todo {
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 8px;
 }
 
-.todo {
-    border: 1px solid #ccc;
-    margin-bottom: 10px;
-    padding: 10px;
+/* Définit la taille de la colonne de gauche */
+.todo-form {
+    flex-basis: 30%;
+}
+
+/* Définit la taille de la colonne de droite */
+.todo-list {
+    flex-basis: 70%;
+}
+
+/* Style pour la liste de tâches */
+ul {
+    list-style-type: none;
+}
+
+/* Style pour les boutons */
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #3e8e41;
+}
+
+.button-valid {
+    padding: 5px;
+    margin-left: 10px;
+    color: black;
+}
+
+.delete-btn1 {
+    background-color: #f44336;
+    margin-right: auto;
+}
+
+.delete-btn1:hover {
+    background-color: #d32f2f;
+}
+
+.delete-btn2 {
+    background-color: #f44336;
+    margin-left: auto;
+}
+
+.delete-btn2:hover {
+    background-color: #d32f2f;
+}
+
+/* Style pour la barre de sélection de filtres */
+.filter-button {
+    background-color: #ccc;
+    border: none;
+    color: #333;
+    padding: 7px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-button.active {
+    background-color: #8c8c8c;
+    color: white;
+}
+
+.filter-button:hover {
+    background-color: #ddd;
 }
 </style>
