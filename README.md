@@ -20,6 +20,7 @@ Pour utiliser l'application, il suffit de cloner le dépôt et de lancer la comm
 ```
 npm run serve
 ```
+Et cliqué sur le lien donné à la fin de l'exécution.
 
 ## Developpement
 
