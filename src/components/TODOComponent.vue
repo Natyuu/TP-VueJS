@@ -47,16 +47,22 @@
                 </div>
                 <ul>
                     <li v-for="(todo, index) in filteredTask" :key="index">
+                        <input type="checkbox" v-model="todo.edit" v-show="editMode" class="checkbox-style" />
                         <span @dblclick="editTitle(index)"
                         contentEditable="true"
                         class="space-edit"
                         @keyup.enter="saveTitle(index, $event)">{{ todo.title }}</span>
                         <span>- {{ todo.description }} - {{ todo.deadline }} </span>
                         <button @click="validateTask(index)"
-                                :style="{ backgroundColor: todo.done ? '#4CAF50' : '#ccc' }" class="button-valid">{{ todo.done ? 'FAIT' : 'valider la tâche' }}</button>
+                                :style="{ backgroundColor: todo.done ? '#4CAF50' : '#ccc' }"
+                                class="button-valid">{{ todo.done ? 'FAIT' : 'Valider' }}</button>
                         <button @click="deleteTask(index)" class="delete-btn2">Supprimer</button>
                     </li>
                 </ul>
+                <div>
+                    <button @click="toggleEditMode()">{{ editMode ? 'Retour' : 'Modifier' }}</button>
+                    <button :style="{ backgroundColor: '#f44336'}" v-show="editMode" @click="deleteEditedTasks">Supprimer</button>
+                </div>
             </div>
         </div>
     </div>
@@ -99,6 +105,8 @@ export default class TODOComponent extends Vue {
 
     public editIndex: number | null = null;
     public editTitleValue: string = '';
+
+    public editMode:boolean = false;
 
     // ajoute dans la liste une nouvelle tache et met la description à 'à faire' s'il n'y a pas de description entrée.
     public addTodo() {
@@ -166,6 +174,20 @@ export default class TODOComponent extends Vue {
         }
         // Retirer le focus de l'élément modifié
         (event.target as HTMLElement).blur();
+    }
+
+    // Ajout d'un bouton d'edition
+    public toggleEditMode(){
+        if(!this.editMode){
+            this.todos.forEach(todo => {
+                todo.edit = false;
+            });
+        }
+        this.editMode = !this.editMode;
+    }
+
+    public deleteEditedTasks() {
+        this.todos = this.todos.filter(todo => !todo.edit);
     }
 }
 </script>
