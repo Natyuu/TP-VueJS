@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="todos">
         <h1>Todos</h1>
         <TODOComponent title="" deadline="" done />
     </div>
@@ -9,10 +9,12 @@
 import { Options, Vue } from 'vue-class-component';
 import TODOComponent from './TODOComponent.vue';
 import axios from 'axios';
+import ThemeSwitch from "@/views/ThemeSwitch.vue";
 
 
 @Options({
     components: {
+        ThemeSwitch,
         TODOComponent,
     },
 })
