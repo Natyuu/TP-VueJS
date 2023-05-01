@@ -24,6 +24,7 @@ Nous avons choisi de réutiliser ce tp pour le projet de WE. Nous avons donc deu
 
 - Ajout d'un "toggle switch" afin de passer du mode clair au sombre.
 - Ajout d'un bouton "Modifier" qui permet la sélection avec des "checkbox" de plusieurs tâches pour les supprimer.
+- Ajout d'une pagination avec un nombre de tâches maximum de 10 par page.
 
 ## Utilisation
 

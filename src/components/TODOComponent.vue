@@ -46,7 +46,7 @@
                             class="space-selection-btn">Faites</button>
                 </div>
                 <ul>
-                    <li v-for="(todo, index) in filteredTask" :key="index">
+                    <li v-for="(todo, index) in getPaginatedTasks()" :key="index">
                         <input type="checkbox" v-model="todo.edit" v-show="editMode" class="checkbox-style" />
                         <span @dblclick="editTitle(index)"
                         contentEditable="true"
@@ -62,6 +62,10 @@
                 <div>
                     <button @click="toggleEditMode()">{{ editMode ? 'Retour' : 'Modifier' }}</button>
                     <button :style="{ backgroundColor: '#f44336'}" v-show="editMode" @click="deleteEditedTasks">Supprimer</button>
+                </div>
+                <div>
+                    <button class="pagination" :disabled="!hasPreviousPage()" @click="previousPage()">Précédent</button>
+                    <button class="pagination" :disabled="!hasNextPage()" @click="nextPage()">Suivant</button>
                 </div>
             </div>
         </div>
@@ -106,7 +110,12 @@ export default class TODOComponent extends Vue {
     public editIndex: number | null = null;
     public editTitleValue: string = '';
 
-    public editMode:boolean = false;
+    public editMode: boolean = false;
+
+    // nombre de tâches par page
+    public perPage: number = 10;
+    // page courante
+    public currentPage: number = 1;
 
     // ajoute dans la liste une nouvelle tache et met la description à 'à faire' s'il n'y a pas de description entrée.
     public addTodo() {
@@ -189,6 +198,34 @@ export default class TODOComponent extends Vue {
     public deleteEditedTasks() {
         this.todos = this.todos.filter(todo => !todo.edit);
     }
+
+    public getPaginatedTasks() {
+        const start = (this.currentPage - 1) * this.perPage;
+        const end = start + this.perPage;
+        return this.filteredTask.slice(start, end);
+    }
+
+    public hasPreviousPage() {
+        return this.currentPage > 1;
+    }
+
+    public previousPage() {
+        if (this.hasPreviousPage()) {
+            this.currentPage -= 1;
+        }
+    }
+
+    public hasNextPage() {
+        const lastPage = Math.ceil(this.todos.length / this.perPage);
+        return this.currentPage < lastPage;
+    }
+
+    public nextPage() {
+        if (this.hasNextPage()) {
+            this.currentPage += 1;
+        }
+    }
+
 }
 </script>
 
@@ -352,5 +389,23 @@ button:hover {
 
 .filter-button:hover {
     background-color: #ddd;
+}
+
+.pagination {
+    background-color: #ccc;
+    border: none;
+    margin-top: 10px;
+    color: #333;
+    padding: 7px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination:hover {
+    background-color: #8c8c8c;
 }
 </style>
